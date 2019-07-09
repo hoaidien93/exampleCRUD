@@ -44,7 +44,7 @@ $(document).ready(function () {
         $(`#${id}`).modal();
     })
 	window.addEventListener('message', function (e) {
-		console.log(wizViewMessenger);
+		wizViewMessenger.postMessage("Hello","mainView")
     });
 	
 });
