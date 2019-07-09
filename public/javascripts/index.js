@@ -43,8 +43,10 @@ $(document).ready(function () {
         var id = this.getAttribute('tourId');
         $(`#${id}`).modal();
     })
+	window.addEventListener('message', function (e) {
+		console.log(wizViewMessenger);
+    });
 	
-	console.log(wizViewMessenger);
 });
 
 function addEventAddTour() {
