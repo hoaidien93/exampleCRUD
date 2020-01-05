@@ -1,34 +1,27 @@
 const Model = require("../DataTier/model");
 let model = new Model();
-
+const AbstractTable = require("../DataTier/AbstractTable");
 class FrontController {
     async getIndex(req, res) {
-        var tourInfo = await model.getAllInfo();
-        return res.render('index', { tourInfo: tourInfo });
+        //var tourInfo = await model.getAllInfo();
+        let allTable = await model.getAllTable();
+        return res.render('index', { allTable: allTable });
+
     }
 
-    async postAddTour(req, res) {
-        var result = await model.addTour(req.body);
-        if (result) {
-            return res.send({
-                "status": "Success"
-            });
-        }
-        return res.send({
-            "status": "Fail"
-        })
-    }
+    async getTable(req,res){
+        
+        let tableName = req.params.tableName; 
 
-    async postDeleteTour(req, res) {
-        await model.deleteTour(req.body);
-        return res.send({
-            "status": "Success"
+        let tableEntity = new AbstractTable(tableName);
+        let tableData = await tableEntity.read();
+        let tableInfo = await tableEntity.getAllField(tableName);
+
+        return res.render('tableDetail', {
+            tableInfo: tableInfo,
+            tableData : tableData,
+            tableName : tableName
         });
-    }
-
-    async postEditTour(req, res) {
-        await model.editTour(req.body);
-        return res.redirect('/');
     }
 }
 

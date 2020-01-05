@@ -1,62 +1,21 @@
-<html>
-
-<head>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
-        integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-    <!-- jQuery Modal -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
-    <script src="javascripts/index.js"></script>
-    <link rel="stylesheet" type="text/css" href="stylesheets/style.css"/>
-</head>
-
-<body>
-    <table id="tour">
-        <tr>
-            <th>Mã tour</th>
-            <th>Nơi đi</th>
-            <th>Nơi đến</th>
-            <th>Ngày khởi hành</th>
-            <th>Tổng thời gian</th>
-            <th>Số người</th>
-            <th>Số tiền</th>
-            <th>Hành động</th>
-        </tr>
-        {{#each tourInfo}}
-        <tr>
-            <td>{{this.TourID}}</td>
-            <td>{{this.From}}</td>
-            <td>{{this.To}}</td>
-            <td>{{this.DateStart}}</td>
-            <td>{{this.Time}} Ngày</td>
-            <td>{{this.Quantity}}</td>
-            <td>{{this.Total}} VNĐ</td>
-            <td class="icon-wrapper">
-                <button class="btn-edit" tourId="{{this.TourID}}">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn-delete" tourId="{{this.TourID}}">
-                    <i class="fas fa-trash-alt"></i>
-                </button>
-
-                {{!-- Modal --}}
-                <form class="modal" id="{{this.TourID}}" method="POST" action="/edit-tour">
-                    <h4>Thay đổi</h4>
-                    <p>Mã tour</p><input type="text"  name="TourID" value="{{this.TourID}}" readonly="readonly"></input>
-                    <p>Nơi đi</p><input type="text"  name="From" value="{{this.From}}"></input>
-                    <p>Nơi đến</p><input type="text"  name="To" value="{{this.To}}"></input>
-                    <p>Ngày khởi hành</p><input type="text" name="DateStart"value="{{this.DateStart}}"></input>
-                    <p>Tổng thời gian</p><input type="text" name="TotalDay"  value="{{this.Time}}"></input>
-                    <p>Số người</p><input type="text" name="Quantity" value="{{this.Quantity}}"></input>
-                    <p>Số tiền</p><input type="text" name="Price" value="{{this.Total}}"></input>
-                    <input class="button-small" type="submit" value="Thay đổi">
-                </form>
-            </td>
-        </tr>
-        {{/each}}
-    </table>
-    <button class="button" id="btn-add">Thêm tour</button>
-</body>
-
-</html>
+<h2 class="ta-center">SEP/CRUD Framework</h2>
+<table id="tour">
+    <tr>
+        <th>STT</th>
+        <th>TableName</th>
+        <th>Action</th>
+    </tr>
+    {{#each allTable}}
+    <tr>
+        <td>{{@index}}</td>
+        <td>{{this}}</td>
+        <td> <button class="btn btn-outline-secondary" onclick="myFunc('{{this}}')">Go</button>
+        </td>
+    </tr>
+    {{/each}}
+</table>
+<script>
+    myFunc = (tableName) => {
+        window.location.replace(`/table-detail/${tableName}`);
+    }
+</script>
