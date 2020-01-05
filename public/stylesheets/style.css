@@ -81,3 +81,13 @@ input {
 .ta-center{
   text-align: center;
 }
+
+.modal.fade{
+    width: 800px;
+    margin-left: 32%;
+    height: 700px;
+    margin-top: 20px;
+}
+.w-35{
+  width: 35% !important;
+}

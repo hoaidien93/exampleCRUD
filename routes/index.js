@@ -6,4 +6,7 @@ let frontController = new FrontController();
 router.get('/', frontController.getIndex);
 router.get('/table-detail/:tableName',frontController.getTable);
 
+router.post('/table-detail/delete',frontController.deleteRow);
+router.post('/table-detail/update',frontController.updateRow);
+router.post('/table-detail/add',frontController.addRow);
 module.exports = router;

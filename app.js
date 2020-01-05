@@ -7,9 +7,11 @@ var bodyParser = require('body-parser');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-
+var Handlebars = require('hbs')
 var app = express();
-
+Handlebars.registerHelper('json', function(context) {
+  return JSON.stringify(context);
+});
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
