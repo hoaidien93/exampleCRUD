@@ -1,0 +1,19 @@
+<h2 class="ta-center">SEP/CRUD Framework</h2>
+
+<div class="w-75 m-auto ta-center">
+    <h4>Choose Database</h4>
+    <select name="database" class="form-control">
+        {{#each listDatabase}}
+        <option value="{{this}}">{{this}}</option>
+        {{/each}}
+    </select>
+    <button class="btn btn-primary mt-2" onclick="myFunc()">Go</button>
+</div>
+
+<script>
+     myFunc = () => {
+        let value = document.querySelector('[name="database"]').value;
+
+        window.location.replace(`/list-table/${value}`)
+    }
+</script>

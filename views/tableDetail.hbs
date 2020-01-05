@@ -1,4 +1,9 @@
+<div class="Header">
+    <a href="/">Home</a>
+    <button class="btn btn-outline-secondary" onclick="back()">Back</button>
+</div>
 <h2 class="ta-center">Table {{tableName}}</h2>
+<input type="hidden" id="database" value="{{database}}">
 <table id="tour">
     <tr>
         {{#each tableInfo}}
@@ -90,6 +95,11 @@
     </div>
 </div>
 <script>
+    function back() {
+        let database = document.querySelector("#database").value;
+        window.location.replace("/list-table/" + database);
+    }
+
     function addNew(e, tableName) {
         let listInput = e.parentNode.parentNode.querySelectorAll('input');
         let newObject = {};
@@ -112,12 +122,11 @@
                     // Refresh page
                     location.reload();
                 }
-                else{
+                else {
                     alert("Thêm mới thất bại");
                 }
             }
         })
-        console.log(newObject);
     }
 
     function saveChange(e, oldObject, tableName) {
@@ -140,9 +149,15 @@
                 tableName: tableName
             }),
             success: function (result) {
-                alert('Cập nhật thành công');
                 // Refresh page
-                location.reload();
+                if (result.status === "Success") {
+                    alert('Cập nhật thành công');
+                    // Refresh page
+                    location.reload();
+                }
+                else {
+                    alert("Cập nhật thất bại");
+                }
             }
         })
 
@@ -163,9 +178,14 @@
                     tableName: tableName
                 }),
                 success: function (result) {
-                    alert('Xóa thành công')
-                    // Refresh page
-                    location.reload();
+                    if (result.status === "Success") {
+                        alert('Xóa thành công');
+                        // Refresh page
+                        location.reload();
+                    }
+                    else {
+                        alert("Xóa thất bại");
+                    }
                 }
             })
         }

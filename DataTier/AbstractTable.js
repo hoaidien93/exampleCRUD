@@ -1,9 +1,22 @@
 class AbstractTable {
-    constructor(name) {
+    constructor(database, name) {
         this.tableName = name;
         this.connect = require('./connect');
-        this.DB_NAME = "sep_crud";
+        this.DB_NAME = database;
         this.hiddenField = [];
+
+        this.connect.changeUser({ database: this.DB_NAME });
+
+    }
+    async getAllTable() {
+        let query = `
+            SELECT TABLE_NAME 
+            FROM INFORMATION_SCHEMA.TABLES
+            WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA='${this.DB_NAME}' 
+        `;
+        let res = await this.connect.query(query);
+        res = res.map((e) => { return e.TABLE_NAME });
+        return res;
     }
 
     async read(limit = 10) {
@@ -12,14 +25,7 @@ class AbstractTable {
             from ${this.tableName} 
             limit ${limit}
         `;
-
         let res = await this.connect.query(query);
-        console.log(res);
-        /*
-        res = res.map((e)=>{return {
-            column: e.COLUMN_NAME,
-            type : e.DATA_TYPE
-        }})*/
         return res;
     }
 
@@ -33,20 +39,16 @@ class AbstractTable {
         };
         allField = allField.slice(0, allField.length - 1);
         allField += ')';
-
-        for (const [key, value] of Object.entries(object)) {
-            
-        };
         allValue = allValue.slice(0, allValue.length - 1);
         allValue += ')';
 
         let query = `
             INSERT INTO ${this.tableName} ${allField} VALUES ${allValue};
         `
-        try{
+        try {
             await this.connect.query(query);
             return 1;
-        }catch(e){
+        } catch (e) {
             return false;
         }
     }
@@ -63,12 +65,17 @@ class AbstractTable {
             queryNewObject += `${key} = '${value}' , `
         };
         queryNewObject = queryNewObject.slice(0, queryNewObject.length - 3);
-        let query = `
+        let query = `  
             Update ${this.tableName} 
             Set  ${queryNewObject}
             where ${queryUpdate}
         `;
-        return await this.connect.query(query);
+        try {
+            await this.connect.query(query);
+            return 1;
+        } catch (e) {
+            return false;
+        }
     }
 
     async delete(dataDelete) {
@@ -77,7 +84,6 @@ class AbstractTable {
         for (const [key, value] of Object.entries(dataDelete)) {
             queryDelete += `${key} = '${value}' and `
         };
-        console.log(this.tableName);
         queryDelete = queryDelete.slice(0, queryDelete.length - 5)
         let query = `
             Delete 
@@ -85,7 +91,12 @@ class AbstractTable {
             where ${queryDelete}
             limit 1
         `;
-        return await this.connect.query(query);
+        try {
+            await this.connect.query(query);
+            return 1;
+        } catch (e) {
+            return false;
+        }
     }
 
     async getAllField() {
@@ -109,7 +120,7 @@ class AbstractTable {
     }
 
     async getPrimarykey() {
-        let query = `
+        let query = ` 
             SHOW KEYS FROM ${this.tableName} WHERE Key_name = 'PRIMARY'
         `;
         let res = await this.connect.query(query);
@@ -123,7 +134,7 @@ class AbstractTable {
     }
 
     async createPrimaryKey() {
-        let query = `
+        let query = ` 
             alter table ${this.tableName} ADD column SEP_ID int AUTO_INCREMENT,
             ADD PRIMARY KEY(SEP_ID);
         `;
