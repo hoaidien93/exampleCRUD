@@ -4,8 +4,9 @@ const FrontController = require("../BusinessTier/FrontController");
 let frontController = new FrontController();
 /* GET home page. */
 router.get('/', frontController.getIndex);
-router.post('/add-tour',frontController.postAddTour);
-router.post('/delete-tour',frontController.postDeleteTour);
-router.post('/edit-tour',frontController.postEditTour);
-
+router.get('/table-detail/:tableName',frontController.getTable);
+router.get('/list-table/:database',frontController.getListTable);
+router.post('/table-detail/delete',frontController.deleteRow);
+router.post('/table-detail/update',frontController.updateRow);
+router.post('/table-detail/add',frontController.addRow);
 module.exports = router;

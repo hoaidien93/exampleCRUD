@@ -1,8 +1,23 @@
+<<<<<<< HEAD
 <h2 class="ta-center">Table {{tableName}}</h2>
 <table id="tour">
     <tr>
         {{#each tableInfo}}
         <th>{{this.column}}</th>
+=======
+<div class="Header">
+    <a href="/">Home</a>
+    <button class="btn btn-outline-secondary" onclick="back()">Back</button>
+</div>
+<h2 class="ta-center">Table {{tableName}}</h2>
+<input type="hidden" id="database" value="{{database}}">
+<table id="tour">
+    <tr>
+        {{#each tableInfo}}
+        {{#if this.notHiddenField}}
+        <th>{{this.column}}</th>
+        {{/if}}
+>>>>>>> origin/master
         {{/each}}
         <th>Action</th>
     </tr>

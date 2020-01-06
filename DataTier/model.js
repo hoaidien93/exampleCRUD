@@ -1,40 +1,28 @@
-var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://hoaidien:KBMBuRLTKD94n5K@ds123753.mlab.com:23753/dulich";
-var dbo;
+class Model {
 
-class Model{
-    constructor(){
-         //Connect dtb:
-         MongoClient.connect(url,{useNewUrlParser: true },(err,db)=> {
-            if (err) throw  err;
-            dbo = db.db("dulich");
-        });
+    constructor() {
+        //Connect dtb:
+        this.connect = require('./connect');
     }
 
-    async getAllInfo(){
-        var result = await dbo.collection("TourDuLich").find({}).toArray();
-        return result;
+    async getAllTable(database) {
+        let query = `
+            SELECT TABLE_NAME 
+            FROM INFORMATION_SCHEMA.TABLES
+            WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA='${database}' 
+        `;
+        let res = await this.connect.query(query);
+        res = res.map((e) => { return e.TABLE_NAME });
+        return res;
     }
 
-    async addTour(tourInfo){
-        // Check is Exists TourID
-        var check = await dbo.collection("TourDuLich").find({"TourID": tourInfo.TourID}).toArray();
-        if(check.length > 0) return false;
-        var result = await dbo.collection("TourDuLich").insert(tourInfo);
-        return true;
-    }
-
-    async deleteTour(query){
-        var result = await dbo.collection("TourDuLich").remove(query);
-        return result;
-    }
-
-    async editTour(tourInfo){
-        var query = {
-            TourID : tourInfo.TourID
-        };
-        var result = await dbo.collection("TourDuLich").update(query,{$set : tourInfo});
-        return result;
+    async showDatabase(){
+        let query = `
+                SELECT schema_name 
+        FROM information_schema.schemata;
+        `;
+        let res = await this.connect.query(query);
+        return res.map((e)=>{return e.schema_name});
     }
 }
 
