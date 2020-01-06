@@ -5,9 +5,10 @@ class AbstractTable {
         this.DB_NAME = database;
         this.hiddenField = [];
 
-        this.connect.changeUser({ database: this.DB_NAME });
+        this.connect.changeUser({database: this.DB_NAME});
 
     }
+
     async getAllTable() {
         let query = `
             SELECT TABLE_NAME 
@@ -15,7 +16,9 @@ class AbstractTable {
             WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA='${this.DB_NAME}' 
         `;
         let res = await this.connect.query(query);
-        res = res.map((e) => { return e.TABLE_NAME });
+        res = res.map((e) => {
+            return e.TABLE_NAME
+        });
         return res;
     }
 
@@ -36,7 +39,8 @@ class AbstractTable {
         for (const [key, value] of Object.entries(object)) {
             allField += `${key},`;
             allValue += `'${value}',`
-        };
+        }
+        ;
         allField = allField.slice(0, allField.length - 1);
         allField += ')';
         allValue = allValue.slice(0, allValue.length - 1);
@@ -57,13 +61,15 @@ class AbstractTable {
         let queryUpdate = "";
         for (const [key, value] of Object.entries(oldObject)) {
             queryUpdate += `${key} = '${value}' and `
-        };
+        }
+        ;
         queryUpdate = queryUpdate.slice(0, queryUpdate.length - 5);
 
         let queryNewObject = "";
         for (const [key, value] of Object.entries(newObject)) {
             queryNewObject += `${key} = '${value}' , `
-        };
+        }
+        ;
         queryNewObject = queryNewObject.slice(0, queryNewObject.length - 3);
         let query = `  
             Update ${this.tableName} 
@@ -83,7 +89,8 @@ class AbstractTable {
 
         for (const [key, value] of Object.entries(dataDelete)) {
             queryDelete += `${key} = '${value}' and `
-        };
+        }
+        ;
         queryDelete = queryDelete.slice(0, queryDelete.length - 5)
         let query = `
             Delete 
@@ -125,9 +132,10 @@ class AbstractTable {
         `;
         let res = await this.connect.query(query);
         if (res.length > 0) {
-            return res.map((e) => { return e.Column_name });
-        }
-        else {
+            return res.map((e) => {
+                return e.Column_name
+            });
+        } else {
             await this.createPrimaryKey();
             return this.getPrimarykey();
         }

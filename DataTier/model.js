@@ -1,4 +1,3 @@
-var MongoClient = require('mongodb').MongoClient;
 class Model {
 
     constructor() {
